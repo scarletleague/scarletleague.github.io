@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scarlet League</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Cinzel', serif;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('background_repeatable.webp') repeat-x;
+            background-size: auto 100%;
+            animation: burnEffect 8s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 70%, rgba(255, 100, 0, 0.4) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 30%, rgba(255, 50, 0, 0.3) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 90%, rgba(255, 150, 0, 0.3) 0%, transparent 50%);
+            animation: fireFlicker 3s ease-in-out infinite alternate;
+        }
+
+        .background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 48%, rgba(255, 100, 0, 0.1) 49%, rgba(255, 100, 0, 0.1) 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(255, 80, 0, 0.1) 49%, rgba(255, 80, 0, 0.1) 51%, transparent 52%);
+            animation: crackleEffect 4s ease-in-out infinite;
+        }
+
+        @keyframes burnEffect {
+            0%, 100% {
+                filter: brightness(1) contrast(1.1) saturate(1.2);
+            }
+            25% {
+                filter: brightness(1.2) contrast(1.3) saturate(1.4);
+            }
+            50% {
+                filter: brightness(0.9) contrast(1.4) saturate(1.6);
+            }
+            75% {
+                filter: brightness(1.1) contrast(1.2) saturate(1.3);
+            }
+        }
+
+        @keyframes backgroundShift {
+            0% { background-position-x: 0; }
+            100% { background-position-x: -100px; }
+        }
+
+        @keyframes fireFlicker {
+            0% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 0.9;
+                transform: scale(0.98);
+            }
+        }
+
+        @keyframes crackleEffect {
+            0%, 100% { opacity: 0.1; }
+            25% { opacity: 0.3; }
+            75% { opacity: 0.2; }
+        }
+
+        .flame-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .flame-particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255, 120, 0, 1) 0%, rgba(255, 180, 0, 0.9) 20%, rgba(255, 80, 0, 0.7) 50%, transparent 80%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: floatUp 5s infinite ease-out;
+            opacity: 0;
+            box-shadow: 0 0 8px rgba(255, 100, 0, 0.8);
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.5);
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(0px) scale(1);
+            }
+            90% {
+                opacity: 0.6;
+                transform: translateY(-400px) scale(0.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-500px) scale(0.1);
+            }
+        }
+
+        .logo-container {
+            position: absolute;
+            top: 0px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .logo {
+            max-width: 300px;
+            height: auto;
+            filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.6));
+        }
+
+        .guild-name {
+            position: absolute;
+            top: 245px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Uncial Antiqua', cursive;
+            font-size: 4.2rem;
+            color: #ebe9e4;
+            text-shadow: 
+                0 0 10px rgba(212, 175, 55, 0.8),
+                0 0 20px rgba(184, 134, 11, 0.6),
+                3px 3px 6px rgba(0,0,0,0.9);
+            z-index: 10;
+            animation: titleGlow 4s ease-in-out infinite alternate;
+            letter-spacing: 3px;
+        }
+        @keyframes titleGlow {
+            from { 
+                text-shadow: 0 0 10px rgba(212, 175, 55, 0.8), 0 0 20px rgba(184, 134, 11, 0.6), 3px 3px 6px rgba(0,0,0,0.9);
+            }
+            to { 
+                text-shadow: 0 0 15px rgba(212, 175, 55, 1), 0 0 30px rgba(184, 134, 11, 0.8), 3px 3px 6px rgba(0,0,0,0.9);
+            }
+        }
+
+        .central-frame {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 460px;
+            height: 691px;
+            z-index: 9;
+            background: url('frame_middle.png') no-repeat center;
+            background-size: contain;
+            padding: 80px 60px 100px 60px;
+            box-sizing: border-box;
+        }
+
+        .central-frame-background {
+            display: none;
+        }
+
+        .frame-content {
+            position: relative;
+            z-index: 2;
+            color: #f4e4bc;
+            font-size: 1.3rem;
+            line-height: 1.4;
+            text-align: justify;
+            height: 100%;
+            display: flex;
+            font-weight: 800;
+            text-shadow: 
+                0 0 10px rgba(212, 175, 55, 0.8);
+            flex-direction: column;
+            justify-content: top;
+        }
+
+        .frame-content h2 {
+            font-family: 'Uncial Antiqua', cursive;
+            color: #ff6b35;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .frame {
+            position: absolute;
+            z-index: 8;
+        }
+
+        .frame-corner-top-left {
+            top: 0;
+            left: 0;
+            background: url('frame_corner_left_top.webp') no-repeat;
+            width: 135px;
+            height: 125px;
+            background-size: 100% 100%;
+        }
+
+        .frame-corner-top-right {
+            top: 0;
+            right: 0;
+            background: url('frame_corner_right_top.webp') no-repeat;
+            width: 135px;
+            height: 125px;
+            background-size: 100% 100%;
+        }
+
+        .frame-corner-bottom-left {
+            bottom: 0;
+            left: 0;
+            background: url('frame_corner_left_bottom.webp') no-repeat;
+            width: 135px;
+            height: 125px;
+            background-size: 100% 100%;
+        }
+
+        .frame-corner-bottom-right {
+            bottom: 0;
+            right: 0;
+            background: url('frame_corner_right_bottom.webp') no-repeat;
+            width: 135px;
+            height: 125px;
+            background-size: 100% 100%;
+        }
+
+        .frame-line-top {
+            top: 0;
+            left: 135px;
+            right: 135px;
+            height: 45px;
+            background: url('frame_line_top.webp') repeat-x;
+            background-size: auto 100%;
+        }
+
+        .frame-line-bottom {
+            bottom: 0;
+            left: 135px;
+            right: 135px;
+            height: 45px;
+            background: url('frame_line_botton.webp') repeat-x;
+            background-size: auto 100%;
+        }
+
+        .frame-line-left {
+            left: 0;
+            top: 125px;
+            bottom: 125px;
+            width: 45px;
+            background: url('frame_line_left.webp') repeat-y;
+            background-size: 100% auto;
+        }
+
+        .frame-line-right {
+            right: 0;
+            top: 125px;
+            bottom: 125px;
+            width: 45px;
+            background: url('frame_line_right.webp') repeat-y;
+            background-size: 100% auto;
+        }
+
+        .discord-button {
+            position: absolute;
+            bottom: 65px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: url('discord_button.webp') no-repeat center;
+            background-size: contain;
+            width: 200px;
+            height: 60px;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 10px rgba(255, 100, 0, 0.4));
+        }
+
+        .discord-button:hover {
+            transform: translateX(-50%) scale(1.1);
+            filter: drop-shadow(0 0 20px rgba(255, 100, 0, 0.8));
+        }
+
+        @media (max-width: 768px) {
+            .guild-name {
+                font-size: 2.5rem;
+                top: 180px;
+            }
+            
+            .logo {
+                max-width: 250px;
+            }
+            
+            .logo-container {
+                top: 5px;
+            }
+            
+            .central-frame {
+                width: 500px;
+                height: 333px;
+                padding: 67px 50px 83px 50px;
+            }
+            
+            .frame-content {
+                font-size: 0.8rem;
+                line-height: 1.4;
+            }
+            
+            .frame-content h2 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+            
+            .discord-button {
+                width: 160px;
+                height: 48px;
+                bottom: 10px;
+            }
+            
+            .frame-corner-top-left,
+            .frame-corner-top-right,
+            .frame-corner-bottom-left,
+            .frame-corner-bottom-right {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .frame-line-top,
+            .frame-line-bottom {
+                left: 60px;
+                right: 60px;
+                height: 60px;
+            }
+            
+            .frame-line-left,
+            .frame-line-right {
+                top: 60px;
+                bottom: 60px;
+                width: 60px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .central-frame {
+                width: 400px;
+                height: 267px;
+                padding: 53px 40px 67px 40px;
+            }
+            
+            .frame-content {
+                font-size: 0.75rem;
+                line-height: 1.3;
+            }
+            
+            .frame-content h2 {
+                font-size: 1.3rem;
+                margin-bottom: 12px;
+            }
+            
+            .guild-name {
+                font-size: 2rem;
+                top: 160px;
+            }
+            
+            .discord-button {
+                width: 140px;
+                height: 42px;
+                bottom: 8px;
+            }
+            
+            .frame-corner-top-left,
+            .frame-corner-top-right,
+            .frame-corner-bottom-left,
+            .frame-corner-bottom-right {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .frame-line-top,
+            .frame-line-bottom {
+                left: 40px;
+                right: 40px;
+                height: 40px;
+            }
+            
+            .frame-line-left,
+            .frame-line-right {
+                top: 40px;
+                bottom: 40px;
+                width: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="flame-particles" id="flame-particles"></div>
+    
+    <div class="frame frame-corner-top-left"></div>
+    <div class="frame frame-corner-top-right"></div>
+    <div class="frame frame-corner-bottom-left"></div>
+    <div class="frame frame-corner-bottom-right"></div>
+    <div class="frame frame-line-top"></div>
+    <div class="frame frame-line-bottom"></div>
+    <div class="frame frame-line-left"></div>
+    <div class="frame frame-line-right"></div>
+    
+    <div class="logo-container">
+        <img src="logo.webp" alt="Scarlet League" class="logo">
+    </div>
+    
+    <h1 class="guild-name">Scarlet League</h1>
+    
+    <div class="central-frame">
+        <div class="central-frame-background"></div>
+        
+        <div class="frame-content">
+            <!-- <h2>Removed</h2> -->
+            <p>Born on Zandalar Tribe at Classic's launch (August 26, 2019!) and now thriving on Firemaw, we've adventured through every expansion and cleared all current PvE content. With a relaxed, community-first spirit, we're all about fun, friends, and epic memories - including IRL meetups.</p>
+            <br>
+            <p>Ready to join? Hit the Discord button below and join us!</p>
+        </div>
+        
+        <button class="discord-button" onclick="window.open('#', '_blank')" title="Join our Discord"></button>
+    </div>
+
+    <script>
+        function createFlameParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'flame-particle';
+            
+            const size = Math.random() * 4 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size * 1.5 + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+
+            particle.style.bottom = Math.random() * 50 + '%';
+            particle.style.animationDuration = (Math.random() * 2 + 4) + 's';
+            particle.style.animationDelay = Math.random() * 0.3 + 's';
+            
+            document.getElementById('flame-particles').appendChild(particle);
+            
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.remove();
+                }
+            }, 7000);
+        }
+
+        setInterval(createFlameParticle, 50);
+        
+        for (let i = 0; i < 25; i++) {
+            setTimeout(createFlameParticle, i * 20);
+        }
+
+        function enhanceBurningEffect() {
+            const background = document.querySelector('.background');
+            const randomIntensity = Math.random() * 0.3 + 0.8;
+            background.style.filter = `brightness(${randomIntensity}) contrast(${1.1 + Math.random() * 0.3}) saturate(${1.2 + Math.random() * 0.4})`;
+        }
+
+        setInterval(enhanceBurningEffect, 2000);
+    </script>
+</body>
+</html>
+
+</body>
+</html>
