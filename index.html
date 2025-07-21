@@ -152,11 +152,11 @@
 
         .guild-name {
             position: absolute;
-            top: 245px;
+            top: calc(250px + 2vh);
             left: 50%;
             transform: translateX(-50%);
             font-family: 'Uncial Antiqua', cursive;
-            font-size: 4.2rem;
+            font-size: clamp(2.5rem, 5vw, 4.2rem);
             color: #ebe9e4;
             text-shadow: 
                 0 0 10px rgba(212, 175, 55, 0.8),
@@ -165,6 +165,8 @@
             z-index: 10;
             animation: titleGlow 4s ease-in-out infinite alternate;
             letter-spacing: 3px;
+            white-space: nowrap;
+            margin-top: 10px;
         }
         @keyframes titleGlow {
             from { 
@@ -177,21 +179,121 @@
 
         .central-frame {
             position: absolute;
-            top: 55%;
+            top: calc(380px + 4vh);
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 460px;
-            height: 691px;
+            transform: translateX(-50%);
+            width: min(90vw, 460px);
+            height: min(auto, calc(100vh - 380px - 4vh - 120px));
+            min-height: 300px;
+            max-height: calc(100vh - 380px - 4vh - 120px);
             z-index: 9;
-            background: url('frame_middle.png') no-repeat center;
-            background-size: contain;
             padding: 80px 60px 100px 60px;
             box-sizing: border-box;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
         }
 
-        .central-frame-background {
-            display: none;
+        .frame-middle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
         }
+
+        .frame-middle-corner-top-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 85px;
+            height: 85px;
+            background: url('frame_middle_corner_left_top.webp') no-repeat;
+            background-size: contain;
+        }
+
+        .frame-middle-corner-top-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 85px;
+            height: 85px;
+            background: url('frame_middle_corner_right_top.webp') no-repeat;
+            background-size: contain;
+        }
+
+        .frame-middle-corner-bottom-left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 85px;
+            height: 85px;
+            background: url('frame_middle_corner_left_bottom.webp') no-repeat;
+            background-size: contain;
+        }
+
+        .frame-middle-corner-bottom-right {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 85px;
+            height: 85px;
+            background: url('frame_middle_corner_right_bottom.webp') no-repeat;
+            background-size: contain;
+        }
+
+        .frame-middle-line-top {
+            position: absolute;
+            top: 0px;
+            left: 84px;
+            right: 84px;
+            height: 85px;
+            background: url('frame_middle_line_top.webp') repeat-x;
+            background-size: auto 100%;
+        }
+
+        .frame-middle-line-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 84px;
+            right: 84px;
+            height: 85px;
+            background: url('frame_middle_line_bottom.webp') repeat-x;
+            background-size: auto 100%;
+        }
+
+        .frame-middle-line-left {
+            position: absolute;
+            left: 0;
+            top: 84px;
+            bottom: 84px;
+            width: 85px;
+            background: url('frame_middle_line_left.webp') repeat-y;
+            background-size: 100% auto;
+        }
+
+        .frame-middle-line-right {
+            position: absolute;
+            right: 0;
+            top: 84px;
+            bottom: 84px;
+            width: 85px;
+            background: url('frame_middle_line_right.webp') repeat-y;
+            background-size: 100% auto;
+        }
+
+        .frame-middle-center {
+            position: absolute;
+            top: 80px;
+            left: 80px;
+            right: 80px;
+            bottom: 80px;
+            background: rgb(13 9 3);
+            background-size: cover;
+        }
+
 
         .frame-content {
             position: relative;
@@ -200,13 +302,14 @@
             font-size: 1.3rem;
             line-height: 1.4;
             text-align: justify;
-            height: 100%;
+            flex: 1;
             display: flex;
             font-weight: 800;
             text-shadow: 
                 0 0 10px rgba(212, 175, 55, 0.8);
             flex-direction: column;
-            justify-content: top;
+            justify-content: flex-start;
+            margin-bottom: 20px;
         }
 
         .frame-content h2 {
@@ -296,10 +399,8 @@
         }
 
         .discord-button {
-            position: absolute;
-            bottom: 65px;
-            left: 50%;
-            transform: translateX(-50%);
+            position: relative;
+            align-self: center;
             background: url('discord_button.webp') no-repeat center;
             background-size: contain;
             width: 200px;
@@ -309,21 +410,22 @@
             z-index: 10;
             transition: all 0.3s ease;
             filter: drop-shadow(0 0 10px rgba(255, 100, 0, 0.4));
+            flex-shrink: 0;
         }
 
         .discord-button:hover {
-            transform: translateX(-50%) scale(1.1);
+            transform: scale(1.1);
             filter: drop-shadow(0 0 20px rgba(255, 100, 0, 0.8));
         }
 
         @media (max-width: 768px) {
             .guild-name {
-                font-size: 2.5rem;
-                top: 180px;
+                font-size: clamp(1.8rem, 4vw, 2.5rem);
+                top: calc(220px + 1.5vh);
             }
             
             .logo {
-                max-width: 250px;
+                max-width: min(60vw, 250px);
             }
             
             .logo-container {
@@ -331,9 +433,42 @@
             }
             
             .central-frame {
-                width: 500px;
-                height: 333px;
-                padding: 67px 50px 83px 50px;
+                width: min(95vw, 500px);
+                height: min(auto, calc(100vh - 300px - 2vh - 100px));
+                min-height: 250px;
+                max-height: calc(100vh - 300px - 2vh - 100px);
+                padding: 50px 40px 60px 40px;
+                top: calc(300px + 2vh);
+                overflow: hidden;
+            }
+            
+            .frame-middle-corner-top-left,
+            .frame-middle-corner-top-right,
+            .frame-middle-corner-bottom-left,
+            .frame-middle-corner-bottom-right {
+                width: 60px;
+                height: 60px;
+            }
+
+            .frame-middle-line-top,
+            .frame-middle-line-bottom {
+                left: 59px;
+                right: 59px;
+                height: 30px;
+            }
+
+            .frame-middle-line-left,
+            .frame-middle-line-right {
+                top: 59px;
+                bottom: 59px;
+                width: 30px;
+            }
+
+            .frame-middle-center {
+                top: 60px;
+                left: 60px;
+                right: 60px;
+                bottom: 60px;
             }
             
             .frame-content {
@@ -349,7 +484,6 @@
             .discord-button {
                 width: 160px;
                 height: 48px;
-                bottom: 10px;
             }
             
             .frame-corner-top-left,
@@ -377,9 +511,42 @@
 
         @media (max-width: 550px) {
             .central-frame {
-                width: 400px;
-                height: 267px;
-                padding: 53px 40px 67px 40px;
+                width: min(98vw, 450px);
+                height: min(auto, calc(100vh - 260px - 1vh - 80px));
+                min-height: 200px;
+                max-height: calc(100vh - 260px - 1vh - 80px);
+                padding: 40px 30px 50px 30px;
+                top: calc(260px + 1vh);
+                overflow: hidden;
+            }
+
+            .frame-middle-corner-top-left,
+            .frame-middle-corner-top-right,
+            .frame-middle-corner-bottom-left,
+            .frame-middle-corner-bottom-right {
+                width: 40px;
+                height: 40px;
+            }
+
+            .frame-middle-line-top,
+            .frame-middle-line-bottom {
+                left: 39px;
+                right: 39px;
+                height: 20px;
+            }
+
+            .frame-middle-line-left,
+            .frame-middle-line-right {
+                top: 39px;
+                bottom: 39px;
+                width: 20px;
+            }
+
+            .frame-middle-center {
+                top: 40px;
+                left: 40px;
+                right: 40px;
+                bottom: 40px;
             }
             
             .frame-content {
@@ -393,14 +560,13 @@
             }
             
             .guild-name {
-                font-size: 2rem;
-                top: 160px;
+                font-size: clamp(1.5rem, 3.5vw, 2rem);
+                top: calc(180px + 1vh);
             }
             
             .discord-button {
                 width: 140px;
                 height: 42px;
-                bottom: 8px;
             }
             
             .frame-corner-top-left,
@@ -447,7 +613,17 @@
     <h1 class="guild-name">Scarlet League</h1>
     
     <div class="central-frame">
-        <div class="central-frame-background"></div>
+        <div class="frame-middle-container">
+            <div class="frame-middle-corner-top-left"></div>
+            <div class="frame-middle-corner-top-right"></div>
+            <div class="frame-middle-corner-bottom-left"></div>
+            <div class="frame-middle-corner-bottom-right"></div>
+            <div class="frame-middle-line-top"></div>
+            <div class="frame-middle-line-bottom"></div>
+            <div class="frame-middle-line-left"></div>
+            <div class="frame-middle-line-right"></div>
+            <div class="frame-middle-center"></div>
+        </div>
         
         <div class="frame-content">
             <!-- <h2>Removed</h2> -->
@@ -495,6 +671,77 @@
         }
 
         setInterval(enhanceBurningEffect, 2000);
+
+        // Handle frame expansion when content overflows
+        function adjustFrameSize() {
+            const centralFrame = document.querySelector('.central-frame');
+            const frameContent = document.querySelector('.frame-content');
+            
+            if (!centralFrame || !frameContent) return;
+            
+            // Get the available space for content
+            const frameHeight = centralFrame.clientHeight;
+            const frameContentTop = frameContent.offsetTop;
+            const discordButton = document.querySelector('.discord-button');
+            const buttonHeight = discordButton ? discordButton.offsetHeight + 40 : 100; // More margin for button
+            
+            const availableHeight = frameHeight - frameContentTop - buttonHeight;
+            const contentHeight = frameContent.scrollHeight;
+            
+            // If content overflows vertically, expand horizontally
+            if (contentHeight > availableHeight) {
+                const minWidth = 460;
+                const maxWidth = window.innerWidth * 0.9;
+                
+                // Calculate how much extra width we need (very aggressive expansion)
+                const overflow = contentHeight - availableHeight;
+                const widthIncrease = Math.min(700, overflow * 3); // Even more aggressive expansion
+                
+                const newWidth = Math.min(maxWidth, minWidth + widthIncrease);
+                centralFrame.style.width = newWidth + 'px';
+                
+                console.log('Frame expanded to:', newWidth, 'px due to overflow:', overflow, 'px');
+                
+                // Check again after expansion to see if we need even more width
+                setTimeout(() => {
+                    const newContentHeight = frameContent.scrollHeight;
+                    const newAvailableHeight = centralFrame.clientHeight - frameContentTop - buttonHeight;
+                    
+                    if (newContentHeight > newAvailableHeight && newWidth < maxWidth) {
+                        const additionalOverflow = newContentHeight - newAvailableHeight;
+                        const additionalWidth = Math.min(500, additionalOverflow * 2.5); // More aggressive second pass
+                        const finalWidth = Math.min(maxWidth, newWidth + additionalWidth);
+                        centralFrame.style.width = finalWidth + 'px';
+                        console.log('Frame further expanded to:', finalWidth, 'px');
+                        
+                        // Third pass if still needed
+                        setTimeout(() => {
+                            const finalContentHeight = frameContent.scrollHeight;
+                            const finalAvailableHeight = centralFrame.clientHeight - frameContentTop - buttonHeight;
+                            
+                            if (finalContentHeight > finalAvailableHeight && finalWidth < maxWidth) {
+                                const lastOverflow = finalContentHeight - finalAvailableHeight;
+                                const lastWidth = Math.min(maxWidth, finalWidth + lastOverflow * 2);
+                                centralFrame.style.width = lastWidth + 'px';
+                                console.log('Frame final expansion to:', lastWidth, 'px');
+                            }
+                        }, 100);
+                    }
+                }, 100);
+            } else {
+                // Content fits, use minimum width
+                centralFrame.style.width = 'min(90vw, 460px)';
+            }
+        }
+        
+        // Wait for fonts and images to load before adjusting
+        window.addEventListener('load', () => {
+            setTimeout(adjustFrameSize, 200);
+        });
+        
+        window.addEventListener('resize', () => {
+            setTimeout(adjustFrameSize, 100);
+        });
     </script>
 </body>
 </html>
